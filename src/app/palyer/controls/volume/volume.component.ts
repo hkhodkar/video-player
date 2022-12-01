@@ -1,4 +1,7 @@
+import { MatSliderChange } from '@angular/material/slider';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+
+import { PlayerService } from 'src/app/services/player.service';
 
 @Component({
   selector: 'vpl-volume',
@@ -7,14 +10,20 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class VolumeComponent implements OnInit {
 
+  isMute: boolean = false;
 
-  constructor() { }
+  constructor(private playerService: PlayerService) { }
 
   ngOnInit(): void {
   }
 
-  onChangeVolume(e: any) {
-    console.log(e);
+  onChangeVolume(event: MatSliderChange) {
+    if (event.value! < 10) {
+      this.isMute = true;
+    } else {
+      this.isMute = false;
+    }
+    this.playerService.onChangeVolume(event.value! / 100);
   }
 
 }

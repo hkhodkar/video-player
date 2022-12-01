@@ -1,8 +1,16 @@
-<button class="btn" mat-mini-fab  [matMenuTriggerFor]="volume">
-  <mat-icon>
+<button class="btn" mat-mini-fab [matMenuTriggerFor]="volume">
+  <mat-icon *ngIf="!isMute; else hasVolume">
     volume_up_outline
   </mat-icon>
+  <ng-template #hasVolume>
+    <mat-icon>
+      volume_off_outline
+    </mat-icon>
+  </ng-template>
+
+
 </button>
 <mat-menu #volume="matMenu" yPosition="above">
-  <mat-slider (change)="onChangeVolume($event)" value="100" min="0" max="100" class="vertical-slider" vertical ></mat-slider>
+  <mat-slider (change)="onChangeVolume($event)" value="100" min="0" max="100" class="vertical-slider" vertical>
+  </mat-slider>
 </mat-menu>
