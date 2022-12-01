@@ -31,10 +31,20 @@ a:visited {
   color: inherit;
 }
 
+.btn {
+  background-color: var(--clr-secondary) !important;
+}
+
+.btn:hover{
+  background-color: var(--clr-primary) !important;
+}
+
+
 
 :root {
   --clr-primary: #1A2630;
   --clr-secondary: #D56E31;
+  --clr-secondary-light: #db895a;
   --clr-success: #00D170;
   --clr-success-light: #aaf5da;
   --clr-accent: #fb5c5c;
@@ -44,7 +54,7 @@ a:visited {
 
 
 .mat-slider-thumb {
-  background-color: var(--clr-primary)!important;
+  background-color: var(--clr-primary) !important;
   right: -4px !important;
   bottom: -4px !important;
   width: 8px !important;
@@ -54,7 +64,7 @@ a:visited {
   outline: 4px solid var(--clr-secondary);
 }
 
-.mat-slider-track-background{
+.mat-slider-track-background {
   background-color: var(--clr-primary) !important;
 }
 
@@ -69,6 +79,3 @@ a:visited {
   height: 8px !important;
   border-radius: 2px;
 }
-
-
-

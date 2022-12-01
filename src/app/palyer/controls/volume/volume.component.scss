@@ -1,0 +1,16 @@
+::ng-deep {
+  .vertical-slider .mat-slider-thumb {
+    width: 8px;
+  }
+  .vertical-slider .mat-slider-track-fill,
+  .vertical-slider .mat-slider-wrapper,
+  .vertical-slider .mat-slider-track-wrapper,
+  .vertical-slider .mat-slider-track-background {
+    height: 100px !important;
+    border-radius: 2px;
+  }
+  .mat-menu-panel{
+    min-width: 50px !important;
+    background-color: #273645;
+  }
+}

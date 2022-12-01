@@ -1,0 +1,14 @@
+<div class="buttons">
+  <button *ngIf="play;else pause" (click)="onShowClick()" class="btn" mat-mini-fab>
+    <mat-icon>
+      pause_circle_outline
+    </mat-icon>
+  </button>
+  <ng-template #pause>
+    <button (click)="onShowClick()" class="btn" mat-mini-fab>
+      <mat-icon>
+        play_circle_outline
+      </mat-icon>
+    </button>
+  </ng-template>
+</div>
