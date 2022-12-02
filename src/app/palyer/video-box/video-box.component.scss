@@ -1,13 +1,18 @@
-.container{
+.container {
   width: 9.5rem;
   height: 9.5rem;
   outline: 4px solid var(--clr-secondary);
 
 
-  img{
+  img {
     width: 100%;
     height: 100%;
     object-fit: fill;
     cursor: pointer;
+  }
+
+  img:hover {
+    transform: scale(1.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   }
 }

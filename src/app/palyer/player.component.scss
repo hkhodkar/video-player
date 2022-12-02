@@ -1,3 +1,13 @@
+h1{
+  text-align: center;
+  color: var(--clr-secondary);
+  letter-spacing: 1rem;
+  text-transform: capitalize;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  font-family: var(--ff-secondary);
+}
+
 .player {
   position: relative;
 
