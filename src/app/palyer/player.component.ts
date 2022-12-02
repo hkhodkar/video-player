@@ -1,6 +1,9 @@
-import { Subscription } from 'rxjs';
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { delay, Subscription, tap } from 'rxjs';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, } from '@angular/core';
 
+import { VideoModel } from './models/video.model';
+import { MapTo } from './mapper/video-mapper'
+import { VideoBox } from './models/video-box.model';
 import { PlayerService } from '../services/player.service';
 
 @Component({
@@ -12,9 +15,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   isVideoEnd = false;
   duration = '00:15';
+  nextVideo!: VideoBox;
+  previousVideo!: VideoBox;
+  videos: VideoModel[] = []
+  selectedVideo!: VideoModel;
   playSubscription$!: Subscription;
   seekSubscription$!: Subscription;
   completeSubscription$!: Subscription;
+  selectVideoSubscription$!: Subscription;
   changeVolumeSubscription$!: Subscription;
   @ViewChild('player') videoPlayer!: ElementRef;
 
@@ -23,13 +31,22 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   ) { }
 
-
-
   ngOnInit(): void {
     this.onseeked();
+    this.loadVideos();
+    this.changeVideo();
     this.onPlayToggle();
     this.onVolumeChange();
     this.onCompleteProgress();
+  }
+
+  loadVideos() {
+    this.playerService.getVideos().subscribe({
+      next: videos => {
+        this.videos = videos;
+        this.onSelectVideo(0);
+      }
+    })
   }
 
 
@@ -69,16 +86,43 @@ export class PlayerComponent implements OnInit, OnDestroy {
   private onseeked() {
     this.seekSubscription$ = this.playerService.seekSubject.subscribe({
       next: value => {
-        this.videoPlayer.nativeElement.currentTime = value * this.videoPlayer.nativeElement.duration /100;
+        this.videoPlayer.nativeElement.currentTime = value * this.videoPlayer.nativeElement.duration / 100;
         this.isVideoEnd = false;
       }
-
     })
+  }
+
+  private changeVideo() {
+    this.selectVideoSubscription$ = this.playerService.selectVideoSubject.pipe(
+      tap(index => this.onSelectVideo(index)),
+      delay(500)
+    ).subscribe({
+      next: _ => this.playerService.onPlayNext(true)
+    })
+  }
+
+
+  private onSelectVideo(id: number) {
+    let index;
+    id == 0 ? index = 0 : index = this.videos.findIndex(item => item.id == id);
+    this.selectedVideo = this.videos[index];
+    this.duration = this.selectedVideo.time;
+    if (index == this.videos.length - 1) {
+      this.nextVideo = MapTo(this.videos[0])
+    } else {
+      this.nextVideo = MapTo(this.videos[index + 1])
+    }
+    if (index == 0) {
+      this.previousVideo = MapTo(this.videos[this.videos.length - 1])
+    } else {
+      this.previousVideo = MapTo(this.videos[index - 1])
+    }
   }
 
   ngOnDestroy(): void {
     this.playSubscription$!?.unsubscribe();
     this.completeSubscription$?.unsubscribe();
+    this.selectVideoSubscription$!?.unsubscribe();
     this.changeVolumeSubscription$!?.unsubscribe();
   }
 }

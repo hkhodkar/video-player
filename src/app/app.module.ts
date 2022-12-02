@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
-import { PalyerModule } from './palyer/palyer.module';
+import { PlayerModule } from './palyer/player.module';
 
 
 @NgModule({
@@ -15,7 +15,7 @@ import { PalyerModule } from './palyer/palyer.module';
   imports: [
     BrowserModule,
     SharedModule,
-    PalyerModule,
+    PlayerModule,
     AppRoutingModule,
     BrowserAnimationsModule,
 

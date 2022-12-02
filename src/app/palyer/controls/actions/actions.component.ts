@@ -14,9 +14,11 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
 
   play: boolean = false;
+  playSubscription$!: Subscription;
   completeProgressSubscription$!: Subscription;
 
   ngOnInit(): void {
+    this.onPlay();
     this.onCompleteProgress()
   }
 
@@ -31,7 +33,14 @@ export class ActionsComponent implements OnInit, OnDestroy {
     })
   }
 
+  private onPlay() {
+    this.playSubscription$ = this.playerService.playSubject.subscribe({
+      next: _ => this.play = !this.play
+    })
+  }
+
   ngOnDestroy(): void {
+    this.playSubscription$?.unsubscribe();
     this.completeProgressSubscription$?.unsubscribe();
   }
 

@@ -1,8 +1,15 @@
 <section class="player">
-  <video preload #player (timeupdate)="updateProgressBar()" [class.gray]="isVideoEnd">
-    <source src="../assets/ForBiggerMeltdowns.mp4">
+  <video [src]="selectedVideo.video_url" #player (timeupdate)="updateProgressBar()" [class.gray]="isVideoEnd">
   </video>
-  <vpl-controls>
+  <ng-container *ngIf="isVideoEnd">
+    <div class="preview-video">
+      <vpl-video-box [item]="nextVideo"></vpl-video-box>
+    </div>
+    <div class="next-video">
+      <vpl-video-box [item]="previousVideo"></vpl-video-box>
+    </div>
+  </ng-container>
+  <vpl-controls [title]="selectedVideo.title">
     <ng-container>
       {{player.currentTime | secondsToHours}} / {{duration }}
     </ng-container>

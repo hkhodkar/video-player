@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
+
+import { VIDEO_LIST } from '../data';
+import { VideoModel } from '../palyer/models/video.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +14,7 @@ export class PlayerService {
   changeVolumeSubject = new Subject<number>();
   completeProgressSubject = new Subject<void>();
   changeProgressSubject = new Subject<number>();
+  selectVideoSubject = new Subject<number>();
 
   constructor() { }
 
@@ -34,6 +38,13 @@ export class PlayerService {
     this.seekSubject.next(value)
   }
 
+  onSelectVideo(value: number) {
+    this.selectVideoSubject.next(value)
+  }
+
+  getVideos(): Observable<VideoModel[]> {
+    return of(VIDEO_LIST);
+  }
 
 }
 

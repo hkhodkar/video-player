@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'vpl-controls',
@@ -8,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class ControlsComponent implements OnInit {
 
   constructor() { }
+
+  @Input() title: string = '';
 
   ngOnInit(): void {
   }
