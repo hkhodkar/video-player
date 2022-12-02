@@ -1,4 +1,4 @@
-<button class="btn" mat-mini-fab [matMenuTriggerFor]="volume">
+<button class="btn" mat-mini-fab [matMenuTriggerFor]="volume" *ngIf="!isMobileView">
   <mat-icon *ngIf="!isMute; else hasVolume">
     volume_up_outline
   </mat-icon>

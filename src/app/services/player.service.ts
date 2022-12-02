@@ -1,4 +1,4 @@
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 import { VIDEO_LIST } from '../data';
@@ -10,11 +10,11 @@ import { VideoModel } from '../palyer/models/video.model';
 export class PlayerService {
 
   seekSubject = new Subject<number>();
-  playSubject = new Subject<boolean>();
+  selectVideoSubject = new Subject<number>();
   changeVolumeSubject = new Subject<number>();
   completeProgressSubject = new Subject<void>();
   changeProgressSubject = new Subject<number>();
-  selectVideoSubject = new Subject<number>();
+  playSubject = new BehaviorSubject<boolean>(false);
 
   constructor() { }
 

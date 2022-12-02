@@ -6,6 +6,7 @@ import { VideoModel } from './models/video.model';
 import { MapTo } from './mapper/video-mapper'
 import { VideoBox } from './models/video-box.model';
 import { PlayerService } from '../services/player.service';
+import { ResponsiveService } from '../services/responsive.service';
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 @Component({
@@ -17,10 +18,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   isVideoEnd = false;
   duration = '00:15';
+  isMobileView = false;
   nextVideo!: VideoBox;
   previousVideo!: VideoBox;
   videos: VideoModel[] = []
   selectedVideo!: VideoModel;
+  isPlaying: boolean = false;
   playSubscription$!: Subscription;
   seekSubscription$!: Subscription;
   completeSubscription$!: Subscription;
@@ -30,31 +33,31 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
 
   config: SwiperOptions = {
-    slidesPerView: 4,
     spaceBetween: 80,
     navigation: true,
-    centeredSlidesBounds: true,
-    centeredSlides: true,
-    // pagination: { clickable: true },
-    // scrollbar: { draggable: true },
+    pagination: false,
+    width: 150,
   };
 
-  onSlideChange() {
-    console.log('slide change');
-  }
 
   constructor(
     private playerService: PlayerService,
+    private responsiveService: ResponsiveService
 
   ) { }
 
   ngOnInit(): void {
+    this.playerService.playSubject.subscribe(res => {
+      this.isPlaying = res;
+    })
     this.onseeked();
     this.loadVideos();
     this.changeVideo();
     this.onPlayToggle();
     this.onVolumeChange();
     this.onCompleteProgress();
+    this.checkMobileView();
+
   }
 
   loadVideos() {
@@ -72,11 +75,15 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.playerService.onChangeProgress(percentage);
   }
 
+  onPlay() {
+    this.isPlaying ? this.playerService.onPlayNext(false) : this.playerService.onPlayNext(true)
+  }
+
   private onPlayToggle() {
     this.playSubscription$ = this.playerService.playSubject.subscribe({
       next: res => {
         this.isVideoEnd = false;
-        res ? this.videoPlayer.nativeElement.play() : this.videoPlayer.nativeElement.pause()
+        res ? this.videoPlayer?.nativeElement?.play() : this.videoPlayer?.nativeElement?.pause()
       }
     })
   }
@@ -114,7 +121,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       tap(index => this.onSelectVideo(index)),
       delay(1000)
     ).subscribe({
-      next: _ =>   this.playerService.onPlayNext(true)
+      next: _ => this.playerService.onPlayNext(true)
     })
   }
 
@@ -134,6 +141,18 @@ export class PlayerComponent implements OnInit, OnDestroy {
     } else {
       this.previousVideo = MapTo(this.videos[index - 1])
     }
+  }
+
+  private checkMobileView() {
+    this.responsiveService.isResponsiveView().subscribe({
+      next: res => {
+        if (res.matches) {
+          this.isMobileView = true;
+        } else {
+          this.isMobileView = false;
+        }
+      }
+    })
   }
 
   ngOnDestroy(): void {

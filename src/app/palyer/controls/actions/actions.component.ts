@@ -2,6 +2,7 @@ import { Subscription } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { PlayerService } from 'src/app/services/player.service';
+import { ResponsiveService } from 'src/app/services/responsive.service';
 
 @Component({
   selector: 'vpl-actions',
@@ -10,9 +11,12 @@ import { PlayerService } from 'src/app/services/player.service';
 })
 export class ActionsComponent implements OnInit, OnDestroy {
 
-  constructor(private playerService: PlayerService) { }
+  constructor(
+    private playerService: PlayerService,
+  ) { }
 
   play: boolean = false;
+  isMobileView: boolean = false;
   playSubscription$!: Subscription;
   completeProgressSubscription$!: Subscription;
 
@@ -20,7 +24,8 @@ export class ActionsComponent implements OnInit, OnDestroy {
     this.playSubscription$ = this.playerService.playSubject.subscribe(res => {
       this.play = res;
     })
-    this.onCompleteProgress()
+    this.onCompleteProgress();
+
   }
 
   onShowClick() {
@@ -33,7 +38,6 @@ export class ActionsComponent implements OnInit, OnDestroy {
       next: _ => this.play = false
     })
   }
-
 
   ngOnDestroy(): void {
     this.playSubscription$?.unsubscribe();

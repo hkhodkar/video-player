@@ -1,7 +1,7 @@
 <section class="controls">
   <div class="buttons">
     <vpl-volume></vpl-volume>
-    <vpl-actions></vpl-actions>
+    <vpl-actions *ngIf="!isMobileView"></vpl-actions>
   </div>
   <div class="progress">
     <vpl-progress></vpl-progress>
