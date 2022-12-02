@@ -1,4 +1,5 @@
 import { delay, Subscription, tap } from 'rxjs';
+import { SwiperComponent } from "swiper/angular";
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy, } from '@angular/core';
 import SwiperCore, { SwiperOptions, Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 
@@ -30,10 +31,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
   selectVideoSubscription$!: Subscription;
   changeVolumeSubscription$!: Subscription;
   @ViewChild('player') videoPlayer!: ElementRef;
+  @ViewChild("sliderSwiper") sliderSwiper!: SwiperComponent;
 
 
   config: SwiperOptions = {
     spaceBetween: 80,
+    centeredSlides: true,
+    centerInsufficientSlides: true,
     navigation: true,
     pagination: false,
     width: 150,
@@ -141,6 +145,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     } else {
       this.previousVideo = MapTo(this.videos[index - 1])
     }
+    this.sliderSwiper?.swiperRef.slideTo(index);
   }
 
   private checkMobileView() {
@@ -153,6 +158,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
         }
       }
     })
+  }
+
+  onChangeVideo(video: VideoBox) {
+    this.playerService.onSelectVideo(video.id)
   }
 
   ngOnDestroy(): void {

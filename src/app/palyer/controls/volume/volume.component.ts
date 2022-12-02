@@ -1,8 +1,8 @@
 import { MatSliderChange } from '@angular/material/slider';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
+import { Subject } from 'rxjs';
 import { PlayerService } from 'src/app/services/player.service';
-import { ResponsiveService } from 'src/app/services/responsive.service';
 
 @Component({
   selector: 'vpl-volume',
@@ -12,32 +12,24 @@ import { ResponsiveService } from 'src/app/services/responsive.service';
 export class VolumeComponent implements OnInit {
   isMute: boolean = false;
   isMobileView: boolean = false;
+  changeVolume = new Subject<number>();
 
-  constructor(private playerService: PlayerService, private responsiveService: ResponsiveService) { }
+  constructor(private playerService: PlayerService) { }
 
   ngOnInit(): void {
+    this.changeVolume.subscribe(res => {
+      this.onChangeVolume(res);
+
+    })
   }
 
-  onChangeVolume(event: MatSliderChange) {
-    if (event.value! < 10) {
+  onChangeVolume(value: number) {
+    if (value! < 10) {
       this.isMute = true;
     } else {
       this.isMute = false;
     }
-    this.playerService.onChangeVolume(event.value! / 100);
-  }
-
-  private checkMobileView() {
-    this.responsiveService.isResponsiveView().subscribe({
-
-      next: res => {
-        if (res.matches) {
-          this.isMobileView = true;
-        } else {
-          this.isMobileView = false;
-        }
-      }
-    })
+    this.playerService.onChangeVolume(value! / 100);
   }
 
 }

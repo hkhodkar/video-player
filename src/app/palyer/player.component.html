@@ -2,27 +2,27 @@
 <section class="player">
   <ng-container>
     <div style="position: relative;">
-      <video (click)="onPlay()" [src]="selectedVideo.video_url" #player (timeupdate)="updateProgressBar()" [class.gray]="isVideoEnd">
+      <video (click)="onPlay()" [src]="selectedVideo.video_url" #player (timeupdate)="updateProgressBar()"
+        [class.gray]="isVideoEnd">
       </video>
       <div class="responsive-action" *ngIf="isMobileView && !isPlaying">
         <vpl-actions></vpl-actions>
       </div>
+      <div *ngIf="isVideoEnd && !isMobileView">
+        <div class="preview-video">
+          <vpl-video-box [item]="previousVideo"></vpl-video-box>
+        </div>
+        <div class="next-video">
+          <vpl-video-box [item]="nextVideo"></vpl-video-box>
+        </div>
+      </div>
     </div>
-    <ng-container *ngIf="isVideoEnd && !isMobileView">
-      <div class="preview-video">
-        <vpl-video-box [item]="nextVideo"></vpl-video-box>
-      </div>
-      <div class="next-video">
-        <vpl-video-box [item]="previousVideo"></vpl-video-box>
-      </div>
-    </ng-container>
-
     <ng-container *ngIf="isVideoEnd && isMobileView">
       <div class="preview-video">
-        <mat-icon class="responsive">skip_previous</mat-icon>
+        <mat-icon (click)="onChangeVideo(previousVideo)" class="responsive">skip_previous</mat-icon>
       </div>
       <div class="next-video">
-        <mat-icon class="responsive">skip_next</mat-icon>
+        <mat-icon (click)="onChangeVideo(nextVideo)" class="responsive">skip_next</mat-icon>
       </div>
     </ng-container>
 

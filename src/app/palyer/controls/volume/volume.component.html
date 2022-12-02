@@ -1,4 +1,4 @@
-<button class="btn" mat-mini-fab [matMenuTriggerFor]="volume" *ngIf="!isMobileView">
+<button class="btn" mat-mini-fab [matMenuTriggerFor]="volume">
   <mat-icon *ngIf="!isMute; else hasVolume">
     volume_up_outline
   </mat-icon>
@@ -11,6 +11,6 @@
 
 </button>
 <mat-menu #volume="matMenu" yPosition="above">
-  <mat-slider (change)="onChangeVolume($event)" value="100" min="0" max="100" class="vertical-slider" vertical>
+  <mat-slider (change)="changeVolume.next(volumeValue.value)" #volumeValue value="100" min="0" max="100" class="vertical-slider" vertical>
   </mat-slider>
 </mat-menu>
