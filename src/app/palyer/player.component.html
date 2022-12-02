@@ -1,7 +1,7 @@
 <h1>Watch and Enjoy your moment</h1>
 <section class="player">
   <ng-container>
-    <div style="position: relative;">
+    <div class="video">
       <video (click)="onPlay()" [src]="selectedVideo.video_url" #player (timeupdate)="updateProgressBar()"
         [class.gray]="isVideoEnd">
       </video>
@@ -16,15 +16,15 @@
           <vpl-video-box [item]="nextVideo"></vpl-video-box>
         </div>
       </div>
+      <div *ngIf="isVideoEnd && isMobileView">
+        <div class="preview-video">
+          <mat-icon (click)="onChangeVideo(previousVideo)" class="responsive">skip_previous</mat-icon>
+        </div>
+        <div class="next-video">
+          <mat-icon (click)="onChangeVideo(nextVideo)" class="responsive">skip_next</mat-icon>
+        </div>
+      </div>
     </div>
-    <ng-container *ngIf="isVideoEnd && isMobileView">
-      <div class="preview-video">
-        <mat-icon (click)="onChangeVideo(previousVideo)" class="responsive">skip_previous</mat-icon>
-      </div>
-      <div class="next-video">
-        <mat-icon (click)="onChangeVideo(nextVideo)" class="responsive">skip_next</mat-icon>
-      </div>
-    </ng-container>
 
     <vpl-controls [title]="selectedVideo.title">
       <ng-container>
@@ -32,12 +32,9 @@
       </ng-container>
     </vpl-controls>
   </ng-container>
-
-  <div class="slider">
-    <swiper #sliderSwiper [config]="config">
-      <ng-template swiperSlide *ngFor="let item of videos">
-        <vpl-video-box class="video-box" [item]="item"></vpl-video-box>
-      </ng-template>
-    </swiper>
-  </div>
 </section>
+<swiper #sliderSwiper [config]="config">
+  <ng-template swiperSlide *ngFor="let item of videos">
+    <vpl-video-box class="video-box" [item]="item"></vpl-video-box>
+  </ng-template>
+</swiper>

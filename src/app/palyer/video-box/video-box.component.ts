@@ -17,8 +17,8 @@ export class VideoBoxComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSelectImage(index: number) {
-    this.playerService.onSelectVideo(index);
+  onSelectImage(id: number) {
+    this.playerService.onSelectVideo(id);
   }
 
 }

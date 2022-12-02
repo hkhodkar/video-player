@@ -1,21 +1,21 @@
 import { delay, Subscription, tap } from 'rxjs';
 import { SwiperComponent } from "swiper/angular";
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy, } from '@angular/core';
-import SwiperCore, { SwiperOptions, Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import SwiperCore, { SwiperOptions, Navigation, Pagination, A11y } from 'swiper';
 
 import { VideoModel } from './models/video.model';
 import { MapTo } from './mapper/video-mapper'
 import { VideoBox } from './models/video-box.model';
 import { PlayerService } from '../services/player.service';
 import { ResponsiveService } from '../services/responsive.service';
-SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
+SwiperCore.use([Navigation, Pagination, A11y]);
 
 @Component({
   selector: 'vpl-player',
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss'],
 })
-export class PlayerComponent implements OnInit, OnDestroy {
+export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isVideoEnd = false;
   duration = '00:15';
@@ -28,6 +28,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
   playSubscription$!: Subscription;
   seekSubscription$!: Subscription;
   completeSubscription$!: Subscription;
+  isPlayingSubscription$!: Subscription;
   selectVideoSubscription$!: Subscription;
   changeVolumeSubscription$!: Subscription;
   @ViewChild('player') videoPlayer!: ElementRef;
@@ -35,32 +36,44 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
 
   config: SwiperOptions = {
+    a11y: { enabled: true },
+    slidesPerView: 5,
     spaceBetween: 80,
     centeredSlides: true,
-    centerInsufficientSlides: true,
-    navigation: true,
-    pagination: false,
-    width: 150,
+    preventInteractionOnTransition: true,
+    navigation: true
   };
 
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private playerService: PlayerService,
     private responsiveService: ResponsiveService
 
   ) { }
 
+  ngAfterViewInit(): void {
+    if (this.isMobileView) {
+      this.config = {
+        a11y: { enabled: true },
+        slidesPerView: 2,
+        spaceBetween: 80,
+        centeredSlides: true,
+        preventInteractionOnTransition: true,
+        navigation: true
+      };
+    }
+  }
+
   ngOnInit(): void {
-    this.playerService.playSubject.subscribe(res => {
-      this.isPlaying = res;
-    })
     this.onseeked();
+    this.onPlaying();
     this.loadVideos();
     this.changeVideo();
     this.onPlayToggle();
     this.onVolumeChange();
-    this.onCompleteProgress();
     this.checkMobileView();
+    this.onCompleteProgress();
 
   }
 
@@ -73,14 +86,23 @@ export class PlayerComponent implements OnInit, OnDestroy {
     })
   }
 
-
   updateProgressBar() {
     var percentage = Math.floor((100 / this.videoPlayer.nativeElement.duration) * this.videoPlayer.nativeElement.currentTime);
     this.playerService.onChangeProgress(percentage);
   }
 
+  onChangeVideo(video: VideoBox) {
+    this.playerService.onSelectVideo(video.id)
+  }
+
   onPlay() {
     this.isPlaying ? this.playerService.onPlayNext(false) : this.playerService.onPlayNext(true)
+  }
+
+  onPlaying() {
+    this.isPlayingSubscription$ = this.playerService.playSubject.subscribe(res => {
+      this.isPlaying = res;
+    })
   }
 
   private onPlayToggle() {
@@ -125,7 +147,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
       tap(index => this.onSelectVideo(index)),
       delay(1000)
     ).subscribe({
-      next: _ => this.playerService.onPlayNext(true)
+      next: _ => {
+        this.playerService.onPlayNext(true);
+        this.cdr.detectChanges();
+      }
     })
   }
 
@@ -160,13 +185,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
     })
   }
 
-  onChangeVideo(video: VideoBox) {
-    this.playerService.onSelectVideo(video.id)
-  }
-
   ngOnDestroy(): void {
     this.playSubscription$!?.unsubscribe();
     this.completeSubscription$?.unsubscribe();
+    this.isPlayingSubscription$?.unsubscribe();
     this.selectVideoSubscription$!?.unsubscribe();
     this.changeVolumeSubscription$!?.unsubscribe();
   }
