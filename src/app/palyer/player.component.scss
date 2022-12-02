@@ -36,3 +36,16 @@ h1{
   top: calc(50% - 100px);
   bottom: 0;
 }
+
+:host {
+  ::ng-deep {
+    .video-box
+    .container{
+      outline: none !important;
+    }
+  }
+}
+
+
+
+

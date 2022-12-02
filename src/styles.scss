@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import url("https://fonts.googleapis.com/css?family=Catamaran:400,700|Grand+Hotel");
+@import 'swiper/scss';
+@import 'swiper/scss/navigation';
+@import 'swiper/scss/pagination';
 
 
 
@@ -40,7 +43,7 @@ a:visited {
   background-color: var(--clr-secondary) !important;
 }
 
-.btn:hover{
+.btn:hover {
   background-color: var(--clr-primary) !important;
 }
 
@@ -85,4 +88,15 @@ a:visited {
 .mat-slider-track-background {
   height: 8px !important;
   border-radius: 2px;
+}
+
+
+.swiper-slide {
+  width: 150px !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--clr-secondary) !important;
+  font-weight: 700;
 }

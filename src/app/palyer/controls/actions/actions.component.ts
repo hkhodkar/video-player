@@ -12,13 +12,14 @@ export class ActionsComponent implements OnInit, OnDestroy {
 
   constructor(private playerService: PlayerService) { }
 
-
   play: boolean = false;
   playSubscription$!: Subscription;
   completeProgressSubscription$!: Subscription;
 
   ngOnInit(): void {
-    this.onPlay();
+    this.playSubscription$ = this.playerService.playSubject.subscribe(res => {
+      this.play = res;
+    })
     this.onCompleteProgress()
   }
 
@@ -33,11 +34,6 @@ export class ActionsComponent implements OnInit, OnDestroy {
     })
   }
 
-  private onPlay() {
-    this.playSubscription$ = this.playerService.playSubject.subscribe({
-      next: _ => this.play = !this.play
-    })
-  }
 
   ngOnDestroy(): void {
     this.playSubscription$?.unsubscribe();

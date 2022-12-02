@@ -35,5 +35,26 @@ export const VIDEO_LIST: VideoModel[] = [
     imageUrl: 'assets/imgs/for-bigger-scape.jpg',
     time: '0:15',
     video_url: 'assets/videos/ForBiggerEscapes.mp4'
-  }
+  },
+  {
+    id: 6,
+    title: 'For Bigger Fun',
+    imageUrl: 'assets/imgs/For-bigger-fun.jpg',
+    time: '1:00',
+    video_url: 'assets/videos/ForBiggerFun.mp4'
+  },
+  {
+    id: 7,
+    title: 'For Bigger Blazes',
+    imageUrl: 'assets/imgs/For-bigger-blazes.jpg',
+    time: '0:15',
+    video_url: 'assets/videos/ForBiggerBlazes.mp4'
+  },
+  {
+    id: 8,
+    title: 'For Bigger Joyriders',
+    imageUrl: 'assets/imgs/For-bigger-joyriders.jpg',
+    time: '0:15',
+    video_url: 'assets/videos/ForBiggerJoyrides.mp4'
+  },
 ]

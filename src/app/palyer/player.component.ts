@@ -1,10 +1,12 @@
 import { delay, Subscription, tap } from 'rxjs';
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy, } from '@angular/core';
+import SwiperCore, { SwiperOptions, Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 
 import { VideoModel } from './models/video.model';
 import { MapTo } from './mapper/video-mapper'
 import { VideoBox } from './models/video-box.model';
 import { PlayerService } from '../services/player.service';
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 @Component({
   selector: 'vpl-player',
@@ -25,6 +27,21 @@ export class PlayerComponent implements OnInit, OnDestroy {
   selectVideoSubscription$!: Subscription;
   changeVolumeSubscription$!: Subscription;
   @ViewChild('player') videoPlayer!: ElementRef;
+
+
+  config: SwiperOptions = {
+    slidesPerView: 4,
+    spaceBetween: 80,
+    navigation: true,
+    centeredSlidesBounds: true,
+    centeredSlides: true,
+    // pagination: { clickable: true },
+    // scrollbar: { draggable: true },
+  };
+
+  onSlideChange() {
+    console.log('slide change');
+  }
 
   constructor(
     private playerService: PlayerService,
@@ -95,9 +112,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
   private changeVideo() {
     this.selectVideoSubscription$ = this.playerService.selectVideoSubject.pipe(
       tap(index => this.onSelectVideo(index)),
-      delay(500)
+      delay(1000)
     ).subscribe({
-      next: _ => this.playerService.onPlayNext(true)
+      next: _ =>   this.playerService.onPlayNext(true)
     })
   }
 

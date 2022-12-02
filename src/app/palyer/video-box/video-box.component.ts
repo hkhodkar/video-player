@@ -10,7 +10,7 @@ import { VideoModel } from '../models/video.model';
 })
 export class VideoBoxComponent implements OnInit {
 
-  @Input() item!: VideoBox;
+  @Input() item!: VideoBox | VideoModel;
 
   constructor(private playerService: PlayerService) { }
 

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 import { VIDEO_LIST } from '../data';
 import { VideoModel } from '../palyer/models/video.model';

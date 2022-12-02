@@ -23,7 +23,8 @@ export class ProgressComponent implements OnInit, OnDestroy {
       next: value => {
         if (value === 100) {
           this.percentage = value
-          this.plyerService.onCompleteProgress()
+          this.plyerService.onPlayNext(false)
+          this.plyerService.onCompleteProgress();
         } else {
           this.percentage = value
         }
